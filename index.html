@@ -4,6 +4,42 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Add after line 16 (after viewport meta tag) -->
+
+    <!-- GrowthBook SDK -->
+    <script async data-client-key="YOUR_CLIENT_KEY" 
+        src="https://cdn.jsdelivr.net/npm/@growthbook/growthbook/dist/bundles/auto.min.js">
+    </script>
+
+    <!-- Simple Analytics for A/B Testing -->
+    <script>
+    // Simple analytics storage
+    window.bookoeAnalytics = {
+        events: [],
+        sessionId: 'session_' + Date.now(),
+        userId: null,
+        heroVariant: null
+    };
+
+    function trackEvent(eventName, properties = {}) {
+        const event = {
+            event: eventName,
+            hero_variant: window.bookoeAnalytics.heroVariant,
+            timestamp: new Date().toISOString(),
+            session_id: window.bookoeAnalytics.sessionId,
+            user_id: window.bookoeAnalytics.userId,
+            ...properties
+        };
+        
+        window.bookoeAnalytics.events.push(event);
+        console.log('📊 Event tracked:', event);
+        
+        // Store in localStorage for demo
+        const storedEvents = JSON.parse(localStorage.getItem('bookoeAnalytics') || '[]');
+        storedEvents.push(event);
+        localStorage.setItem('bookoeAnalytics', JSON.stringify(storedEvents));
+    }
+    </script>
     <title>Bookoe - Book Store Website</title>
     <link rel="stylesheet" href="css/style.css" />
     <!--- google font link-->
@@ -79,45 +115,121 @@
       </nav>
     </header>
 
-    <section class="hero">
-      <div class="main">
-        <div class="content">
-          <small>back to school</small>
-          <h2>Special 50% Off</h2>
-          <h5>for our student community</h5>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus,
-            maiores? Eius culpa molestias expedita magni incidunt necessitatibus
-            .
-          </p>
-          <div class="btns">
-            <button>Get The Deal<i class="fa-solid fa-arrow-right"></i></button>
-            <button>See other Promos</button>
+    <!-- Replace your existing hero section with this -->
+    <section class="hero" id="heroSection">
+      <!-- Test Indicator -->
+      <div id="testIndicator" class="test-indicator" style="display: none;">
+        A/B Test: Loading...
+      </div>
+
+      <!-- Original Hero (Variant A) -->
+      <div id="heroOriginal" class="hero-variant">
+        <div class="main">
+          <div class="content">
+            <small>back to school</small>
+            <h2>Special 50% Off</h2>
+            <h5>for our student community</h5>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus,
+              maiores? Eius culpa molestias expedita magni incidunt necessitatibus.
+            </p>
+            <div class="btns">
+              <button onclick="trackEvent('hero_cta_click', {button: 'get_deal', variant: 'original'})">
+                Get The Deal<i class="fa-solid fa-arrow-right"></i>
+              </button>
+              <button onclick="trackEvent('hero_cta_click', {button: 'see_promos', variant: 'original'})">
+                See other Promos
+              </button>
+            </div>
+          </div>
+          <div class="img">
+            <img
+              src="images/teenager-student-girl-yellow-pointing-finger-side-copy.png"
+              alt=""
+            />
           </div>
         </div>
-        <div class="img">
-          <img
-            src="images/teenager-student-girl-yellow-pointing-finger-side-copy.png"
-            alt=""
-          />
+        <div class="square-dot">
+          <i class="fa-solid fa-square"></i>
+          <i class="fa-solid fa-square"></i>
+          <i class="fa-solid fa-square"></i>
+          <i class="fa-solid fa-square"></i>
+          <i class="fa-solid fa-square"></i>
+          <i class="fa-solid fa-square"></i>
+          <i class="fa-solid fa-square"></i>
+          <i class="fa-solid fa-square"></i>
+          <i class="fa-solid fa-square"></i>
+          <i class="fa-solid fa-square"></i>
+          <i class="fa-solid fa-square"></i>
+          <i class="fa-solid fa-square"></i>
         </div>
+        <div class="orange-circle"></div>
+        <div class="blue-circle"></div>
       </div>
-      <div class="square-dot">
-        <i class="fa-solid fa-square"></i>
-        <i class="fa-solid fa-square"></i>
-        <i class="fa-solid fa-square"></i>
-        <i class="fa-solid fa-square"></i>
-        <i class="fa-solid fa-square"></i>
-        <i class="fa-solid fa-square"></i>
-        <i class="fa-solid fa-square"></i>
-        <i class="fa-solid fa-square"></i>
-        <i class="fa-solid fa-square"></i>
-        <i class="fa-solid fa-square"></i>
-        <i class="fa-solid fa-square"></i>
-        <i class="fa-solid fa-square"></i>
+
+      <!-- Beta Hero (Variant B) -->
+      <div id="heroBeta" class="hero-variant hero-beta">
+        <div class="main">
+          <div class="content">
+            <div class="hero-badge">🔥 LIMITED TIME</div>
+            <h2>Mega Book Sale!</h2>
+            <h5>Up to 70% off bestsellers</h5>
+            <p>
+              Discover thousands of books at unbeatable prices. From fiction to academic texts, 
+              find your next great read with our biggest sale of the year!
+            </p>
+            <div class="btns">
+              <button class="primary-cta" onclick="trackEvent('hero_cta_click', {button: 'shop_now', variant: 'beta'})">
+                Shop Now & Save<i class="fa-solid fa-shopping-bag"></i>
+              </button>
+              <button class="secondary-cta" onclick="trackEvent('hero_cta_click', {button: 'browse_deals', variant: 'beta'})">
+                Browse All Deals
+              </button>
+            </div>
+            <div class="hero-stats">
+              <div class="stat">
+                <strong>50K+</strong>
+                <span>Books Available</span>
+              </div>
+              <div class="stat">
+                <strong>24hr</strong>
+                <span>Fast Delivery</span>
+              </div>
+              <div class="stat">
+                <strong>4.8★</strong>
+                <span>Customer Rating</span>
+              </div>
+            </div>
+          </div>
+          <div class="img">
+            <img
+              src="images/teenager-student-girl-yellow-pointing-finger-side-copy.png"
+              alt=""
+            />
+            <div class="floating-books">
+              <div class="book-float">📚</div>
+              <div class="book-float">📖</div>
+              <div class="book-float">📕</div>
+            </div>
+          </div>
+        </div>
+        <div class="square-dot">
+          <i class="fa-solid fa-square"></i>
+          <i class="fa-solid fa-square"></i>
+          <i class="fa-solid fa-square"></i>
+          <i class="fa-solid fa-square"></i>
+          <i class="fa-solid fa-square"></i>
+          <i class="fa-solid fa-square"></i>
+          <i class="fa-solid fa-square"></i>
+          <i class="fa-solid fa-square"></i>
+          <i class="fa-solid fa-square"></i>
+          <i class="fa-solid fa-square"></i>
+          <i class="fa-solid fa-square"></i>
+          <i class="fa-solid fa-square"></i>
+        </div>
+        <div class="orange-circle"></div>
+        <div class="blue-circle"></div>
       </div>
-      <div class="orange-circle"></div>
-      <div class="blue-circle"></div>
     </section>
 
     <section class="service">
@@ -946,5 +1058,139 @@
     <script src="js/repeat-js.js"></script>
     <script src="js/add-to-cart.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+    <!-- Add this before closing </body> tag -->
+    <script>
+    // A/B Testing Setup for Hero Section
+    function initializeHeroABTest() {
+        // Simulate user attributes
+        const userId = 'user_' + Math.random().toString(36).substr(2, 9);
+        const userAttributes = {
+            id: userId,
+            country: 'US',
+            device: /Mobile|Android|iPhone|iPad/.test(navigator.userAgent) ? 'mobile' : 'desktop',
+            returning_user: localStorage.getItem('returning_user') === 'true',
+            session_count: parseInt(localStorage.getItem('session_count') || '1')
+        };
+
+        // Mark as returning user for next visit
+        localStorage.setItem('returning_user', 'true');
+        localStorage.setItem('session_count', userAttributes.session_count + 1);
+
+        // Store user info
+        window.bookoeAnalytics.userId = userId;
+
+        // Wait for GrowthBook to be ready
+        const checkGrowthBook = setInterval(() => {
+            if (window.growthbook) {
+                clearInterval(checkGrowthBook);
+                
+                // Set user attributes
+                window.growthbook.setAttributes(userAttributes);
+                
+                // Get hero variant from A/B test
+                const heroVariant = window.growthbook.getFeatureValue('hero-design-test', 'original');
+                window.bookoeAnalytics.heroVariant = heroVariant;
+                
+                // Show appropriate hero variant
+                showHeroVariant(heroVariant);
+                
+                // Track experiment exposure
+                trackEvent('experiment_exposure', {
+                    experiment: 'hero-design-test',
+                    variant: heroVariant,
+                    user_attributes: userAttributes
+                });
+                
+                console.log('🧪 A/B Test initialized:', {
+                    user: userAttributes,
+                    hero_variant: heroVariant
+                });
+            }
+        }, 100);
+    }
+
+    function showHeroVariant(variant) {
+        const originalHero = document.getElementById('heroOriginal');
+        const betaHero = document.getElementById('heroBeta');
+        const indicator = document.getElementById('testIndicator');
+        
+        // Hide both variants first
+        originalHero.classList.remove('active');
+        betaHero.classList.remove('active');
+        
+        // Show the selected variant
+        if (variant === 'beta') {
+            betaHero.classList.add('active');
+            indicator.textContent = 'A/B Test: Beta Version';
+            indicator.classList.add('beta');
+            indicator.style.display = 'block';
+            trackEvent('hero_variant_shown', { variant: 'beta' });
+        } else {
+            originalHero.classList.add('active');
+            indicator.textContent = 'A/B Test: Original Version';
+            indicator.classList.remove('beta');
+            indicator.style.display = 'block';
+            trackEvent('hero_variant_shown', { variant: 'original' });
+        }
+    }
+
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeHeroABTest();
+        
+        // Track page view after a short delay
+        setTimeout(() => {
+            trackEvent('page_view', { page: 'homepage' });
+        }, 1000);
+    });
+
+    // Track scroll engagement
+    let scrollTracked = false;
+    window.addEventListener('scroll', function() {
+        if (!scrollTracked && window.scrollY > 300) {
+            scrollTracked = true;
+            trackEvent('scroll_engagement', { 
+                scroll_depth: window.scrollY,
+                engagement_level: 'medium'
+            });
+        }
+    });
+
+    // Analytics dashboard function
+    function showAnalytics() {
+        const events = JSON.parse(localStorage.getItem('bookoeAnalytics') || '[]');
+        
+        // Group events by variant
+        const stats = events.reduce((acc, event) => {
+            const variant = event.hero_variant || 'unknown';
+            if (!acc[variant]) {
+                acc[variant] = { total: 0, cta_clicks: 0, page_views: 0, scroll_engagement: 0 };
+            }
+            acc[variant].total++;
+            if (event.event === 'hero_cta_click') acc[variant].cta_clicks++;
+            if (event.event === 'page_view') acc[variant].page_views++;
+            if (event.event === 'scroll_engagement') acc[variant].scroll_engagement++;
+            return acc;
+        }, {});
+        
+        console.log('📊 A/B Test Results:', stats);
+        
+        // Calculate conversion rates
+        Object.keys(stats).forEach(variant => {
+            if (stats[variant].page_views > 0) {
+                stats[variant].cta_conversion_rate = 
+                    ((stats[variant].cta_clicks / stats[variant].page_views) * 100).toFixed(2) + '%';
+                stats[variant].engagement_rate = 
+                    ((stats[variant].scroll_engagement / stats[variant].page_views) * 100).toFixed(2) + '%';
+            }
+        });
+        
+        console.table(stats);
+        return stats;
+    }
+
+    // Show analytics every 30 seconds
+    setInterval(showAnalytics, 30000);
+    </script>
   </body>
 </html>
