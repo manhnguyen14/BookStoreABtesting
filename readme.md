@@ -73,3 +73,9 @@ If you want to contact with me you can reach me at [Instagram](https://www.insta
 ### License
 
 This project is **Free To Use** and does not contains any license.
+
+### RUN
+npm install -g http-server
+>> http-server -p 8000
+
+
